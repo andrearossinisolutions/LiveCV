@@ -11,6 +11,7 @@ type DashboardFormProps = {
 };
 
 type ExperienceDraft = {
+  draftId: number;
   position: string;
   company: string;
   description: string;
@@ -19,8 +20,11 @@ type ExperienceDraft = {
   isCurrent: boolean;
 };
 
+let nextDraftId = 1;
+
 function toDraft(experience?: Experience): ExperienceDraft {
   return {
+    draftId: experience?.id ?? nextDraftId++,
     position: experience?.position ?? "",
     company: experience?.company ?? "",
     description: experience?.description ?? "",
@@ -129,7 +133,7 @@ export function DashboardForm({
 
         <div className="experience-stack">
           {experiences.map((experience, index) => (
-            <article className="experience-card" key={`${index}-${experience.company}`}>
+            <article className="experience-card" key={experience.draftId}>
               <div className="experience-card-head">
                 <h3>Esperienza {index + 1}</h3>
                 {experiences.length > 1 ? (
