@@ -1,10 +1,12 @@
 import Link from "next/link";
 
+import { logoutAction } from "@/app/actions";
+import { TopbarNav } from "@/components/topbar-nav";
 import { DashboardForm } from "@/components/dashboard-form";
 import { requireUser } from "@/lib/auth";
 import { getProfileByUserId } from "@/lib/db";
 
-import { logoutAction, saveProfileAction } from "./actions";
+import { saveProfileAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -25,23 +27,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   return (
     <main className="dashboard-shell">
-      <header className="topbar">
-        <div className="brand">
-          <span className="brand-mark">L</span>
-          <span>LiveCV Studio</span>
-        </div>
-
-        <div className="dashboard-links">
-          <a className="ghost-button" href={publicUrl}>
-            Vedi pagina pubblica
-          </a>
-          <form action={logoutAction}>
-            <button className="secondary-button" type="submit">
-              Logout
-            </button>
-          </form>
-        </div>
-      </header>
+      <TopbarNav
+        currentNav="dashboard"
+        publicHref={publicUrl}
+        isLoggedIn
+        logoutAction={logoutAction}
+        brandLabel="LiveCV Studio"
+      />
 
       <section className="dashboard-layout" style={{ marginTop: "1.5rem" }}>
         <div className="dashboard-main">

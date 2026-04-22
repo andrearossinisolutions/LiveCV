@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { TopbarNav } from "@/components/topbar-nav";
 import { getCurrentUser } from "@/lib/auth";
+import { getRandomPublishedProfile } from "@/lib/db";
 
 import { registerAction } from "./actions";
 
@@ -17,6 +19,8 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
     redirect("/dashboard");
   }
 
+  const featuredSlug = getRandomPublishedProfile();
+  const publicHref = featuredSlug ? `/${featuredSlug}` : "/";
   const { error } = await searchParams;
 
   const messageMap: Record<string, string> = {
@@ -28,7 +32,10 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
 
   return (
     <main className="login-shell">
-      <section className="login-card">
+      <div className="shell" style={{ width: "min(calc(100% - 2rem), 980px)" }}>
+        <TopbarNav currentNav="none" publicHref={publicHref} isLoggedIn={false} />
+      </div>
+      <section className="login-card" style={{ marginTop: "1rem" }}>
         <span className="eyebrow">Crea account</span>
         <h1>Apri il tuo spazio e prova subito il login.</h1>
         <p className="muted">

@@ -1,32 +1,26 @@
 import Link from "next/link";
 
+import { logoutAction } from "@/app/actions";
+import { TopbarNav } from "@/components/topbar-nav";
+import { getCurrentUser } from "@/lib/auth";
 import { getRandomPublishedProfile } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getCurrentUser();
   const featuredSlug = getRandomPublishedProfile();
+  const publicHref = featuredSlug ? `/${featuredSlug}` : "/";
 
   return (
     <main className="hero-shell">
       <div className="shell">
-        <header className="topbar">
-          <div className="brand">
-            <span className="brand-mark">L</span>
-            <span>LiveCV</span>
-          </div>
-
-          <nav className="nav-links">
-            <Link className="ghost-button" href="/login">
-              Area privata
-            </Link>
-            {featuredSlug ? (
-              <Link className="secondary-button" href={`/${featuredSlug}`}>
-                Esempio pubblico
-              </Link>
-            ) : null}
-          </nav>
-        </header>
+        <TopbarNav
+          currentNav="home"
+          publicHref={publicHref}
+          isLoggedIn={Boolean(user)}
+          logoutAction={logoutAction}
+        />
 
         <section className="hero-layout">
           <article className="hero-card hero-copy">
@@ -42,9 +36,15 @@ export default function HomePage() {
               <Link className="primary-button" href="/dashboard">
                 Apri dashboard
               </Link>
-              <Link className="secondary-button" href="/login">
-                Login amministratore
-              </Link>
+              {user ? (
+                <a className="secondary-button" href={publicHref}>
+                  Apri pagina pubblica
+                </a>
+              ) : (
+                <Link className="secondary-button" href="/login">
+                  Login amministratore
+                </Link>
+              )}
             </div>
 
             <div className="landing-highlights">

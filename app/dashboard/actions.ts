@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { clearSession, requireUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { updateProfile } from "@/lib/db";
 import type { ExperienceInput } from "@/lib/types";
 
@@ -45,9 +45,4 @@ export async function saveProfileAction(formData: FormData) {
   revalidatePath("/dashboard");
   revalidatePath(`/${slug}`);
   redirect(`/dashboard?saved=1&slug=${slug}`);
-}
-
-export async function logoutAction() {
-  await clearSession();
-  redirect("/login");
 }

@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { logoutAction } from "@/app/actions";
+import { TopbarNav } from "@/components/topbar-nav";
+import { getCurrentUser } from "@/lib/auth";
 import { getProfileBySlug } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +22,7 @@ function formatPeriod(startDate: string, endDate: string | null, isCurrent: bool
 
 export default async function PublicProfilePage({ params }: PublicProfilePageProps) {
   const { slug } = await params;
+  const user = await getCurrentUser();
   const data = getProfileBySlug(slug);
 
   if (!data) {
@@ -35,17 +38,12 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
 
   return (
     <main className="public-shell">
-      <div className="topbar">
-        <div className="brand">
-          <span className="brand-mark">L</span>
-          <span>LiveCV</span>
-        </div>
-        <div className="nav-links">
-          <Link className="ghost-button" href="/">
-            Home
-          </Link>
-        </div>
-      </div>
+      <TopbarNav
+        currentNav="public"
+        publicHref={`/${slug}`}
+        isLoggedIn={Boolean(user)}
+        logoutAction={logoutAction}
+      />
 
       <section className="public-layout" style={{ marginTop: "1.5rem" }}>
         <article className="public-main">
