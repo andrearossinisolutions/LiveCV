@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type CurrentNav = "home" | "dashboard" | "public" | "none";
+type CurrentNav = "home" | "login" | "dashboard" | "public" | "none";
 
 type TopbarNavProps = {
   currentNav: CurrentNav;
@@ -32,19 +32,24 @@ export function TopbarNav({
         <Link className={buttonClass(currentNav === "home")} href="/">
           Home
         </Link>
-        <Link className={buttonClass(currentNav === "dashboard")} href="/dashboard">
-          Dashboard
-        </Link>
-        <a className={buttonClass(currentNav === "public")} href={publicHref}>
-          Pagina pubblica
-        </a>
-        {isLoggedIn && logoutAction ? (
-          <form action={logoutAction}>
-            <button className="secondary-button" type="submit">
-              Logout
-            </button>
-          </form>
-        ) : null}
+        {isLoggedIn && logoutAction
+          ? <>
+            <Link className={buttonClass(currentNav === "dashboard")} href="/dashboard">
+              Dashboard
+            </Link>
+            <a className={buttonClass(currentNav === "public")} href={publicHref}>
+              Pagina pubblica
+            </a>
+            <form action={logoutAction}>
+              <button className="ghost-button" type="submit">
+                Logout
+              </button>
+            </form>
+          </>
+          : <Link className={buttonClass(currentNav === "login")} href="/login">
+            Login
+          </Link>
+        }
       </nav>
     </header>
   );
