@@ -4,6 +4,7 @@ import { logoutAction } from "@/app/actions";
 import { TopbarNav } from "@/components/topbar-nav";
 import { getCurrentUser } from "@/lib/auth";
 import { getProfileBySlug, getProfileByUserId } from "@/lib/db";
+import { markdownToSafeHtml } from "@/lib/markdown";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
   }
 
   const { profile, experiences } = data;
+  const bioHtml = markdownToSafeHtml(profile.bio);
   const links = [
     { label: "Sito web", href: profile.website },
     { label: "LinkedIn", href: profile.linkedin },
@@ -64,7 +66,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
               {profile.currentCompany ? ` presso ${profile.currentCompany}` : ""}
             </p>
 
-            {profile.bio ? <p className="public-bio">{profile.bio}</p> : null}
+            {bioHtml ? <div className="public-bio markdown-content" dangerouslySetInnerHTML={{ __html: bioHtml }} style={{ marginTop: "1rem" }} /> : null}
 
             <div className="public-meta">
               {profile.location ? <span className="chip">{profile.location}</span> : null}
@@ -86,7 +88,11 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
                     <div className="timeline-body">
                       <h3>{experience.position}</h3>
                       <strong>{experience.company}</strong>
-                      <p>{experience.description}</p>
+                      <div
+                        className="markdown-content"
+                        dangerouslySetInnerHTML={{ __html: markdownToSafeHtml(experience.description) }}
+                        style={{ marginTop: "1rem" }}
+                      />
                     </div>
                   </article>
                 ))}

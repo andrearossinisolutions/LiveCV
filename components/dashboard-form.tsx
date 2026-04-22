@@ -82,8 +82,13 @@ export function DashboardForm({
             <input name="location" defaultValue={initialProfile.location} />
           </label>
           <label className="full-span">
-            <span>Bio</span>
-            <textarea name="bio" defaultValue={initialProfile.bio} rows={4} />
+            <span>Bio (Markdown)</span>
+            <textarea
+              name="bio"
+              defaultValue={initialProfile.bio}
+              rows={5}
+              placeholder="Esempio: **Frontend Engineer** con focus su UX, performance e accessibilita'."
+            />
           </label>
         </div>
       </section>
@@ -220,9 +225,10 @@ export function DashboardForm({
                   <span>Ruolo attuale</span>
                 </label>
                 <label className="full-span">
-                  <span>Descrizione</span>
+                  <span>Descrizione (Markdown)</span>
                   <textarea
                     rows={4}
+                    placeholder="- Risultato 1\n- Risultato 2\n\nUsa **grassetto**, *corsivo* e [link](https://...)"
                     value={experience.description}
                     onChange={(event) =>
                       setExperiences((current) =>
