@@ -40,6 +40,17 @@ type ExperienceRow = {
   sort_order: number;
 };
 
+const EXPERIENCE_ORDER_BY = `
+  ORDER BY
+    is_current DESC,
+    CASE
+      WHEN is_current = 1 THEN COALESCE(start_date, '')
+      ELSE COALESCE(end_date, start_date, '')
+    END DESC,
+    COALESCE(start_date, '') DESC,
+    id DESC
+`;
+
 const dataDirectory = path.join(process.cwd(), "data");
 const databasePath = path.join(dataDirectory, "livecv.sqlite");
 
@@ -272,7 +283,7 @@ export function getProfileByUserId(userId: number): ProfileWithExperience | null
   }
 
   const experienceRows = db
-    .prepare("SELECT * FROM experiences WHERE profile_id = ? ORDER BY sort_order ASC, id ASC")
+    .prepare(`SELECT * FROM experiences WHERE profile_id = ? ${EXPERIENCE_ORDER_BY}`)
     .all(profileRow.id) as ExperienceRow[];
 
   return {
@@ -292,7 +303,7 @@ export function getProfileBySlug(slug: string): ProfileWithExperience | null {
   }
 
   const experienceRows = db
-    .prepare("SELECT * FROM experiences WHERE profile_id = ? ORDER BY sort_order ASC, id ASC")
+    .prepare(`SELECT * FROM experiences WHERE profile_id = ? ${EXPERIENCE_ORDER_BY}`)
     .all(profileRow.id) as ExperienceRow[];
 
   return {
