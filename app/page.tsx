@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-import { getFirstPublishedProfile } from "@/lib/db";
+import { getRandomPublishedProfile } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
-  const featuredSlug = getFirstPublishedProfile();
+  const featuredSlug = getRandomPublishedProfile();
 
   return (
     <main className="hero-shell">

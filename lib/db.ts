@@ -312,10 +312,10 @@ export function getProfileBySlug(slug: string): ProfileWithExperience | null {
   };
 }
 
-export function getFirstPublishedProfile() {
+export function getRandomPublishedProfile() {
   initializeDatabase();
   const row = db
-    .prepare("SELECT slug FROM profiles ORDER BY updated_at DESC LIMIT 1")
+    .prepare("SELECT slug FROM profiles ORDER BY RANDOM() LIMIT 1")
     .get() as { slug: string } | undefined;
 
   return row?.slug ?? null;
