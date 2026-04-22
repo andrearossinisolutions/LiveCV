@@ -120,13 +120,6 @@ export function DashboardForm({
             <span className="eyebrow">Esperienze</span>
             <h2>Storico professionale</h2>
           </div>
-          <button
-            className="secondary-button"
-            type="button"
-            onClick={() => setExperiences((current) => [...current, toDraft()])}
-          >
-            Aggiungi esperienza
-          </button>
         </div>
 
         <div className="experience-stack">
@@ -245,9 +238,18 @@ export function DashboardForm({
             </article>
           ))}
         </div>
+
+        <button
+            className="secondary-button"
+            type="button"
+            style={{ marginTop: "2rem" }}
+            onClick={() => setExperiences((current) => [...current, toDraft()])}
+          >
+            Aggiungi esperienza
+          </button>
       </section>
 
-      <div className="form-actions">
+      <div className="form-actions" style={{ marginTop: "2rem" }}>
         <button className="primary-button" type="submit" disabled={isPending}>
           {isPending ? "Salvataggio..." : "Salva curriculum"}
         </button>

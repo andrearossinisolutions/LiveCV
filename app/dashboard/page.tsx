@@ -68,7 +68,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <p className="muted">
               Ogni salvataggio aggiorna la pagina pubblica con lo slug configurato nel form.
             </p>
-            <a className="primary-button" href={publicUrl}>
+            <a className="primary-button" href={publicUrl} target="_blank">
               Apri {publicUrl}
             </a>
           </div>
