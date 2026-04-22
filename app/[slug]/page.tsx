@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { logoutAction } from "@/app/actions";
 import { TopbarNav } from "@/components/topbar-nav";
 import { getCurrentUser } from "@/lib/auth";
-import { getProfileBySlug } from "@/lib/db";
+import { getProfileBySlug, getProfileByUserId } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +23,7 @@ function formatPeriod(startDate: string, endDate: string | null, isCurrent: bool
 export default async function PublicProfilePage({ params }: PublicProfilePageProps) {
   const { slug } = await params;
   const user = await getCurrentUser();
+  const userProfile = user ? getProfileByUserId(user.id) : null;
   const data = getProfileBySlug(slug);
 
   if (!data) {
@@ -40,7 +41,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
     <main className="public-shell">
       <TopbarNav
         currentNav="public"
-        publicHref={`/${slug}`}
+        publicHref={userProfile ? `/${userProfile.profile.slug}` : "/"}
         isLoggedIn={Boolean(user)}
         logoutAction={logoutAction}
       />

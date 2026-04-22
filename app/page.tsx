@@ -3,21 +3,23 @@ import Link from "next/link";
 import { logoutAction } from "@/app/actions";
 import { TopbarNav } from "@/components/topbar-nav";
 import { getCurrentUser } from "@/lib/auth";
-import { getRandomPublishedProfile } from "@/lib/db";
+import { getProfileByUserId, getRandomPublishedProfile } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const user = await getCurrentUser();
   const featuredSlug = getRandomPublishedProfile();
-  const publicHref = featuredSlug ? `/${featuredSlug}` : "/";
+  const userProfile = user ? getProfileByUserId(user.id) : null;
+  const navPublicHref = userProfile ? `/${userProfile.profile.slug}` : "/";
+  const randomPublicHref = featuredSlug ? `/${featuredSlug}` : "/";
 
   return (
     <main className="hero-shell">
       <div className="shell">
         <TopbarNav
           currentNav="home"
-          publicHref={publicHref}
+          publicHref={navPublicHref}
           isLoggedIn={Boolean(user)}
           logoutAction={logoutAction}
         />
@@ -33,18 +35,18 @@ export default async function HomePage() {
             </p>
 
             <div className="hero-actions">
-              <Link className="primary-button" href="/dashboard">
-                Apri dashboard
-              </Link>
               {user ? (
-                <a className="secondary-button" href={publicHref}>
-                  Apri pagina pubblica
-                </a>
+                <Link className="primary-button" href="/dashboard">
+                  Apri dashboard
+                </Link>
               ) : (
                 <Link className="secondary-button" href="/login">
                   Login
                 </Link>
               )}
+              <a className="secondary-button" href={randomPublicHref}>
+                Pagina pubblica casuale
+              </a>
             </div>
 
             <div className="landing-highlights">
