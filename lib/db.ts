@@ -392,3 +392,64 @@ export function updateProfile(
 
   return normalizedSlug;
 }
+
+export function createUserProfileAccount(payload: {
+  email: string;
+  passwordHash: string;
+  firstName: string;
+  lastName: string;
+}) {
+  initializeDatabase();
+
+  const existingUser = db
+    .prepare("SELECT id FROM users WHERE email = ?")
+    .get(payload.email) as { id: number } | undefined;
+
+  if (existingUser) {
+    throw new Error("Email gia' registrata.");
+  }
+
+  const baseSlug = slugify(`${payload.firstName}-${payload.lastName}`) || "nuovo-cv";
+
+  const transaction = db.transaction(() => {
+    const userResult = db
+      .prepare("INSERT INTO users (email, password_hash) VALUES (?, ?)")
+      .run(payload.email, payload.passwordHash);
+
+    const userId = Number(userResult.lastInsertRowid);
+    let slugCandidate = baseSlug;
+    let suffix = 2;
+
+    while (
+      db.prepare("SELECT id FROM profiles WHERE slug = ?").get(slugCandidate) as
+        | { id: number }
+        | undefined
+    ) {
+      slugCandidate = `${baseSlug}-${suffix}`;
+      suffix += 1;
+    }
+
+    db.prepare(
+      `INSERT INTO profiles (
+        user_id, slug, first_name, last_name, headline, current_company, bio, location, public_email, website, linkedin, github
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      userId,
+      slugCandidate,
+      payload.firstName.trim(),
+      payload.lastName.trim(),
+      "",
+      "",
+      "",
+      "",
+      payload.email.trim(),
+      "",
+      "",
+      ""
+    );
+
+    return { userId, slug: slugCandidate };
+  });
+
+  return transaction();
+}

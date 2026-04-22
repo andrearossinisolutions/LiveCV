@@ -47,6 +47,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <p className="muted">
           Torna alla <Link href="/">home</Link>.
         </p>
+        <p className="muted">
+          Non hai un account? <Link href="/register">registrati qui</Link>.
+        </p>
       </section>
     </main>
   );
