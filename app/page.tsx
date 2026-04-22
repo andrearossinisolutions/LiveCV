@@ -42,7 +42,7 @@ export default async function HomePage() {
                 </a>
               ) : (
                 <Link className="secondary-button" href="/login">
-                  Login amministratore
+                  Login
                 </Link>
               )}
             </div>

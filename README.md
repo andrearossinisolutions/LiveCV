@@ -11,7 +11,7 @@ MVP FE+BE con Next.js e SQLite per creare un curriculum pubblico condivisibile s
 
 ## Funzionalita'
 
-- Login amministratore
+- Registration / Login
 - Dashboard privata per aggiornare dati profilo e esperienze
 - Pagina pubblica dinamica tramite slug
 - Seed iniziale automatico con utente admin e profilo demo
